@@ -9,11 +9,13 @@ module buffers
     ! OBJECTS:      
     !   delayline: ring buffer storage line
     !
-    ! METHODSs:
+    ! METHODS:
     !   push         : adds a value to the buffer
     !   pop          : read value from buffer
     !   reset        : reset the buffer back to 0_cf 
     !   rbDestructor : clean up when leaving scope
+    !
+    !   fullPop_     : peek whole stored buffer
     ! --------------------------------------------------
 
     use numtype
@@ -33,6 +35,8 @@ module buffers
         procedure    :: pop               => rbPop
         procedure    :: reset             => rbReset
         final        :: rbDestructor 
+        ! unit testing
+        procedure    :: fullPop_    
     end type ringbuffer
         
 
@@ -42,7 +46,7 @@ contains
 
     subroutine rbPush(buffer,value) 
         !
-        !   push value into ring buffer
+        !   push value into ring bufferfullPop_(buffer, buffersize)
         !
         class(ringbuffer), intent(inout) :: buffer
         real(cf), intent(in)             :: value
@@ -60,7 +64,7 @@ contains
         !
         ! read value off of buffer at readIdx
         !
-        ! RETURNS:
+        ! RETURNS:fullPop_(buffer, buffersize)
         !           value [c_float]
         !
         class(ringbuffer), intent(inout) :: buffer
@@ -72,6 +76,28 @@ contains
         buffer%readIdx = mod(buffer%readIdx + 1_ci, buffer%size)
 
     end function rbPop
+
+    ! FULL POP !
+
+    function fullPop_(buffer, buffersize) result(values)
+        !
+        ! FOR UNIT TESTING ONLY
+        ! applues rbPop to the whole stored buffer(buffersize)
+        !  
+        ! RETURNS:
+        !           values [array(c_float)]
+        !
+        class(ringbuffer), intent(inout) :: buffer
+        real(cf), intent(in)             :: values(buffersize)
+
+        do i = 1, buffersize 
+
+            buffer%readIdx = i    
+            values(i) = buffer%pop(buffer)
+
+        end do
+
+    end function fullPop_
 
     ! RESET
 
@@ -87,13 +113,11 @@ contains
 
     end subroutine rbReset
 
-
     ! DESTRUCTOR
 
     subroutine rbDestructor(buffer)
         !
         !   Finalizer (C++ Destructor)
-        !   Frees up memory
         !
         type(ringbuffer), intent(inout) :: buffer
 
