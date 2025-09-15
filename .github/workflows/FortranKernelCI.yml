@@ -1,0 +1,38 @@
+# .github/workflows/deploy-kernel.yml
+name: Deploy Kernel Folder to Test Repo
+
+on:
+  push:
+    branches:
+      - pipeline   
+
+jobs:
+  deploy:
+    name: Deploy Kernel to Another Repo
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout current repo
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Clone target repo
+      run: |
+        git clone https://$PAT@github.com/Void-Audio/Fortran-CI-CD-unit-tests.git target_repo
+      env:
+        PAT: ${{ secrets.TARGET_REPO_PAT }}
+
+    - name: Replace kernel folder
+      run: |
+        rm -rf target_repo/kernel
+        cp -R kernel target_repo/kernel
+
+    - name: Commit and push changes
+      run: |
+        cd target_repo
+        git add kernel
+        git commit -m "Update kernel folder from source repo [ci skip]" || echo "No changes to commit"
+        git push origin main
+      env:
+        PAT: ${{ secrets.TARGET_REPO_PAT }}
