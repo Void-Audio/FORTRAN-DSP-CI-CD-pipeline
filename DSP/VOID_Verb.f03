@@ -1,48 +1,37 @@
 module VOID_Verb
-
+! Simple wrapper to expose ring buffer
+! to c++ for CI/CD integration
     use numtype
     use buffers
     implicit none
 
+    type(ringBuffer) :: buffer
 
+contains   
 
-    type, bind(c) :: ringWrapper
-    !
-    ! Simple wrapper to expose ring buffer
-    ! to c++ for CI/CD integration
-    !
-        integer(ci) :: size
-        real(cf)    :: delayline(150000)
-        integer(ci) :: writeIdx
-        integer(ci) :: readIdx 
-
-    end type ringWrapper
-
-
-    subroutine ringPush(buffer, val) bind(C)
+    subroutine ringPush(val) bind(C)
     !
     !   wraps bufferRing%push()
     !
-        type(ringWrapper), intent(inout) :: buffer
         real(cf), intent(in)             :: val
         integer(ci)                      :: i
 
-        i = buffer%writeIdx + 1
+        i = buffer%writeIdx + 1_ci
         buffer%delayline(i) = val
         buffer%writeIdx = mod(buffer%writeIdx + 1, buffer%size)
 
     end subroutine ringPush
 
 
-    subroutine ringPopAll(buffer, memory, buffersize) bind(C)
+    subroutine ringPopAll(memory, buffersize) bind(C)
     !
     !   wraps ringBuffer%fullPop_()
     !
-        type(ringWrapper), intent(inout) :: buffer
-        real(cf), intent(out)            :: output(n)
         integer(ci), intent(in)          :: buffersize 
+        real(cf), intent(out)            :: memory(buffersize)
 
-        memory = buffer%fullPop_(buffersize)
+
+        call buffer%fullPop_(memory, buffersize)
 
     end subroutine ringPopAll
 

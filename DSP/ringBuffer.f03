@@ -79,7 +79,7 @@ contains
 
     ! FULL POP !
 
-    function fullPop_(buffer, buffersize) result(values)
+    subroutine fullPop_(buffer, memory, buffersize) 
         !
         ! FOR UNIT TESTING ONLY
         ! applues rbPop to the whole stored buffer(buffersize)
@@ -88,16 +88,18 @@ contains
         !           values [array(c_float)]
         !
         class(ringbuffer), intent(inout) :: buffer
-        real(cf), intent(in)             :: values(buffersize)
+        integer(ci), intent(in)          :: buffersize
+        real(cf), intent(out)            :: memory(buffersize)
+        integer(ci)                      :: i
 
         do i = 1, buffersize 
 
             buffer%readIdx = i    
-            values(i) = buffer%pop(buffer)
+            memory(i) = buffer%pop()
 
         end do
 
-    end function fullPop_
+    end subroutine fullPop_
 
     ! RESET
 
