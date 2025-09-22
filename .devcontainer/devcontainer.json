@@ -9,7 +9,8 @@
         "vscode": {
             "extensions": [
                 "Gimly81.fortran",
-                "hansec.fortran-ls"
+                "hansec.fortran-ls",
+                "github.vscode-github-actions"
                 
             ]
         }
