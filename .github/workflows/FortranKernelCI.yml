@@ -1,0 +1,45 @@
+name: Deploy Fortran Kernel
+
+on:
+  push:
+    branches:
+      - pipeline
+
+jobs:
+  deploy_kernel:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Codespace repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "Codespace Bot"
+          git config --global user.email "codespace-bot@example.com"
+
+      - name: Clone target repo
+        env:
+          PAT: ${{ secrets.TARGET_REPO_PAT }}
+        run: |
+          git clone https://$PAT@github.com/<username>/<target-repo>.git target-repo
+          cd target-repo
+          git checkout main || git checkout -b main
+
+      - name: Replace kernel folder
+        run: |
+          rm -rf target-repo/kernel
+          cp -r kernel target-repo/kernel
+
+      - name: Commit and push changes
+        run: |
+          cd target-repo
+          git add kernel
+          if ! git diff --cached --quiet; then
+            git commit -m "Update kernel from pipeline branch"
+            git push origin main
+          else
+            echo "No changes to push."
+          fi
