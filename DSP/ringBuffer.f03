@@ -89,12 +89,11 @@ contains
         !
         class(ringbuffer), intent(inout) :: buffer
         integer(ci), intent(in)          :: buffersize
-        real(cf), intent(out)            :: memory(buffersize)
+        real(cf), intent(out)            :: memory(0:buffersize-1)
         integer(ci)                      :: i
 
-        do i = 1, buffersize 
+        do i = 0, buffersize - 1
 
-            buffer%readIdx = i    
             memory(i) = buffer%pop()
 
         end do
