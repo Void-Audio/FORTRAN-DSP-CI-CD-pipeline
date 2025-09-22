@@ -2,7 +2,7 @@ FC      = gfortran
 FFLAGS  = -Wall -O2 -std=f2008 -fPIC -Wtabs -J$(OBJDIR)
 LDFLAGS = -shared
 
-SRC     = DSP/numtype.f03 DSP/ringBuffer.f03 DSP/VOID_Verb.f03
+SRC     = DSP/numtype.f03  DSP/VOID_ConVerb.f03
 
 OBJDIR  = kernel
 OBJ     = $(patsubst DSP/%.f03,$(OBJDIR)/%.o,$(SRC))

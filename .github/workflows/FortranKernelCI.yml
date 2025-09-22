@@ -43,3 +43,11 @@ jobs:
           else
             echo "No changes to push."
           fi
+
+      - name: Trigger unit test repo
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  
+          repository: Void-Audio/Fortran-CI-CD-unit-tests   
+          event-type: kernel-updated
+          client-payload: '{"branch": "pipeline"}'

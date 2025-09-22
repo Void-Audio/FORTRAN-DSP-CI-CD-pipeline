@@ -2,6 +2,8 @@
 module NumType
 
 	use iso_c_binding, only: c_float, c_int
+	!* Library includes *!
+	include 'fftw3.f03'
 	save
 	
 	integer, parameter :: cf = kind(1.0_c_float)
