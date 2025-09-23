@@ -11,7 +11,15 @@ module NumType
 	
 	!real(cf), parameter :: pi = 4*atan(1._cf)
 	
-	!complex(cf), parameter :: iic = (0._cf,1._cf)
+	complex(cf), parameter :: iic = (0._cf,1._cf)
+
+	!
+	! NEEDED OBJECTS
+	!
+
+	complex(cf) :: buffer(0:5000)
+	complex(cf) :: ImpRes(0:5000)
+
 	
 end module numtype
 
