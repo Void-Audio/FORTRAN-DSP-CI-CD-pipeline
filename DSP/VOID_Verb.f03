@@ -1,6 +1,9 @@
 module VOID_Verb
 ! Simple wrapper to expose ring buffer
 ! to c++ for CI/CD integration
+! Needed for non-interpolability of 
+! type-bound methods (which are the best)
+
     use numtype
     use buffers
     implicit none
