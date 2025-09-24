@@ -22,20 +22,17 @@ jobs:
 
       - name: Build and run unit test
         run: |
-          # Build test in the current (Codespace) repo
           make test
-          # Run test and handle exit code gracefully
+          
           ./test
-        continue-on-error: true
-
-      - name: Check test result
-        run: |
-          if [ $? -eq 1 ]; then
+          TEST_EXIT=$?
+          
+          if [ $TEST_EXIT -eq 1 ]; then
             echo "Unit test returned 1 — failing gracefully"
-          elif [ $? -eq 0 ]; then
+          elif [ $TEST_EXIT -eq 0 ]; then
             echo "Unit test passed — continuing workflow"
           else
-            echo "Unit test returned unexpected code $? — failing workflow"
+            echo "Unit test returned unexpected code $TEST_EXIT — failing workflow"
             exit 1
           fi
 
