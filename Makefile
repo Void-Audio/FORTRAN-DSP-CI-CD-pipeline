@@ -51,3 +51,7 @@ $(OBJDIR):
 # ------------------------------------------------------------
 clean:
 	rm -rf $(OBJDIR) $(TESTEXE)
+
+.PHONY: run
+run: all $(TESTEXE)
+	./$(TESTEXE)

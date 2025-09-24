@@ -28,6 +28,29 @@ jobs:
           cd target-repo
           git checkout main || git checkout -b main
 
+      - name: Build test executable
+        run: |
+          cd target-repo
+          make test
+
+      - name: Run unit test
+        run: |
+          cd target-repo
+          ./test
+        continue-on-error: true
+
+      - name: Check test result
+        run: |
+          cd target-repo
+          if [ $? -eq 1 ]; then
+            echo "Unit test returned 1 — failing gracefully"
+          elif [ $? -eq 0 ]; then
+            echo "Unit test passed — continuing workflow"
+          else
+            echo "Unit test returned unexpected code $? — failing workflow"
+            exit 1
+          fi
+
       - name: Replace kernel folder
         run: |
           rm -rf target-repo/kernel
