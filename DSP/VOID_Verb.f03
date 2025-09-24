@@ -28,7 +28,7 @@ contains
     !   wraps ringBuffer%fullPop_()
     !
         integer(ci), intent(in)          :: buffersize 
-        real(cf), intent(out)            :: memory(0:buffersize-1)
+        real(cf), intent(out)            :: memory(*)
 
 
         call buffer%fullPop_(memory, buffersize)
