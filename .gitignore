@@ -21,4 +21,7 @@ pat.txt
 /bin/
 /lib/
 /obj
+/test
+
+/kernel/test.o 
 
