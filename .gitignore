@@ -25,6 +25,8 @@ pat.txt
 
 /kernel/test.o 
 /DSP/test.f03
+/DSP/d01b.f03
+/DSP/cheby.f03
 test
 
 
