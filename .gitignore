@@ -23,5 +23,6 @@ pat.txt
 /obj
 /test
 
+/DSP/test.f03
 /kernel/test.o 
 
