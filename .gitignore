@@ -21,8 +21,11 @@ pat.txt
 /bin/
 /lib/
 /obj
-/test
+/test/
 
-/DSP/test.f03
 /kernel/test.o 
+/DSP/test.f03
+test
+
+
 
