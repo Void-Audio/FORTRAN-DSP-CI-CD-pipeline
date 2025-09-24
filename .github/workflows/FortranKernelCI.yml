@@ -24,7 +24,7 @@ jobs:
         env:
           PAT: ${{ secrets.TARGET_REPO_PAT }}
         run: |
-          git clone https://$PAT@github.com/<username>/<target-repo>.git target-repo
+          git clone https://$PAT@github.com/Void-Audio/Fortran-CI-CD-unit-tests.git target-repo
           cd target-repo
           git checkout main || git checkout -b main
 
