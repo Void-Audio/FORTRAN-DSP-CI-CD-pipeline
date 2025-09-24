@@ -20,28 +20,16 @@ jobs:
           git config --global user.name "Codespace Bot"
           git config --global user.email "codespace-bot@example.com"
 
-      - name: Clone target repo
-        env:
-          PAT: ${{ secrets.TARGET_REPO_PAT }}
+      - name: Build and run unit test
         run: |
-          git clone https://$PAT@github.com/Void-Audio/Fortran-CI-CD-unit-tests.git target-repo
-          cd target-repo
-          git checkout main || git checkout -b main
-
-      - name: Build test executable
-        run: |
-          cd target-repo
+          # Build test in the current (Codespace) repo
           make test
-
-      - name: Run unit test
-        run: |
-          cd target-repo
+          # Run test and handle exit code gracefully
           ./test
         continue-on-error: true
 
       - name: Check test result
         run: |
-          cd target-repo
           if [ $? -eq 1 ]; then
             echo "Unit test returned 1 — failing gracefully"
           elif [ $? -eq 0 ]; then
@@ -50,6 +38,14 @@ jobs:
             echo "Unit test returned unexpected code $? — failing workflow"
             exit 1
           fi
+
+      - name: Clone target repo
+        env:
+          PAT: ${{ secrets.TARGET_REPO_PAT }}
+        run: |
+          git clone https://$PAT@github.com/Void-Audio/Fortran-CI-CD-unit-tests.git target-repo
+          cd target-repo
+          git checkout main || git checkout -b main
 
       - name: Replace kernel folder
         run: |
