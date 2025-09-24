@@ -38,5 +38,3 @@ clean:
 .PHONY: run
 run: all $(TESTEXE)
 	./$(TESTEXE)
-
-# ARBITRARY UPDATE
