@@ -34,7 +34,7 @@ contains
         real(cf), intent(in)      :: inbuffer
         real(cf), intent(out)     :: outbuffer
 
-        ringPush(inBuffer)
+        call ringPush(inBuffer)
 
         outbuffer = inbuffer 
 
