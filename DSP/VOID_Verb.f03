@@ -1,6 +1,9 @@
 module VOID_Verb
 ! Simple wrapper to expose ring buffer
 ! to c++ for CI/CD integration
+! Needed for non-interpolability of 
+! type-bound methods (which are the best)
+
     use numtype
     use buffers
     implicit none
@@ -23,15 +26,31 @@ contains
     end subroutine ringPush
 
 
-    subroutine ringPopAll(memory, buffersize) bind(C)
+
+    subroutine VProcess(inBuffer, outBuffer) bind(C)
+    !
+    !   main process entry point
+    !
+        real(cf), intent(in)      :: inbuffer
+        real(cf), intent(out)     :: outbuffer
+
+        call ringPush(inBuffer)
+
+        outbuffer = inbuffer 
+
+    end subroutine vprocess
+
+
+
+    subroutine ringPopAll(outbuffer, buffersize) bind(C)
     !
     !   wraps ringBuffer%fullPop_()
     !
         integer(ci), intent(in)          :: buffersize 
-        real(cf), intent(out)            :: memory(0:buffersize-1)
+        real(cf), intent(out)            :: outbuffer(*)
 
 
-        call buffer%fullPop_(memory, buffersize)
+        call buffer%fullPop_(outbuffer, buffersize)
 
     end subroutine ringPopAll
 

@@ -20,11 +20,27 @@ jobs:
           git config --global user.name "Codespace Bot"
           git config --global user.email "codespace-bot@example.com"
 
+      - name: Build and run unit test
+        run: |
+          make test
+          
+          ./test
+          TEST_EXIT=$?
+          
+          if [ $TEST_EXIT -eq 1 ]; then
+            echo "Unit test returned 1 — failing gracefully"
+          elif [ $TEST_EXIT -eq 0 ]; then
+            echo "Unit test passed — continuing workflow"
+          else
+            echo "Unit test returned unexpected code $TEST_EXIT — failing workflow"
+            exit 1
+          fi
+
       - name: Clone target repo
         env:
           PAT: ${{ secrets.TARGET_REPO_PAT }}
         run: |
-          git clone https://$PAT@github.com/<username>/<target-repo>.git target-repo
+          git clone https://$PAT@github.com/Void-Audio/Fortran-CI-CD-unit-tests.git target-repo
           cd target-repo
           git checkout main || git checkout -b main
 
